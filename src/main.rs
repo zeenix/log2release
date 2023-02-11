@@ -45,14 +45,14 @@ fn main() {
         .stdout;
     let git_log = String::from_utf8(git_log_cmd_out).unwrap();
     let internal_regex = Regex::new(r"internal.*:").unwrap();
-    let prefix_regex = Regex::new(r"(?m)^.*:").unwrap();
+    let prefix_regex = Regex::new(r"(?m)^([[:alnum:]]|[[:space:]])*:").unwrap();
     let quote_regex = Regex::new(r"(?m)^>.*$").unwrap();
     let multispace_regex = Regex::new(r"  +").unwrap();
     let logs = git_log.as_str().split("END").filter_map(|s| {
         if s.is_empty() || internal_regex.is_match(s) {
             return None;
         }
-        let s = prefix_regex.replace_all(s, "");
+        let s = prefix_regex.replace(s, "");
         let s = quote_regex.replace_all(&*s, "");
         let s = s.trim().replace("\n", " ");
         let s = multispace_regex.replace_all(&s, " ");
