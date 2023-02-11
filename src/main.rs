@@ -15,7 +15,7 @@ fn main() {
 
     // Get the tags from the local repo for the subproject
     let tags_list_cmd_out = Command::new("git")
-        .args(&["tag", "--list"])
+        .args(&["tag", "--list", "--sort=version:refname"])
         .current_dir(local_repo)
         .output()
         .expect("failed to execute process")
